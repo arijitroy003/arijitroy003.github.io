@@ -245,9 +245,15 @@ a:focus-visible {
 
 .about-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 2rem;
     margin-top: 3rem;
+}
+
+@media (min-width: 768px) and (max-width: 1200px) {
+    .about-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 .about-item {
