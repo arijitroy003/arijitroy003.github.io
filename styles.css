@@ -221,11 +221,12 @@ a:focus-visible {
     font-weight: 500;
     transition: var(--transition);
     background: transparent;
+    color: var(--ui-primary);
 }
 
 .hero-link:hover {
-    background: var(--ui-primary);
-    color: white;
+    background: var(--ui-primary) !important;
+    color: black !important;
     transform: translateY(-2px);
     box-shadow: var(--shadow-md);
 }
@@ -412,8 +413,8 @@ a:focus-visible {
 }
 
 .skill-tag:hover {
-    background: var(--ui-primary);
-    color: white;
+    background: var(--ui-primary) !important;
+    color: white !important;
     transform: translateY(-2px);
 }
 
@@ -594,5 +595,10 @@ a:focus-visible {
     .skill-tag {
         background: var(--ui-surface);
         border: 2px solid var(--ui-primary);
+    }
+    
+    .skill-tag:hover {
+        background: var(--ui-primary) !important;
+        color: var(--ui-background) !important;
     }
 }
