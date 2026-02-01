@@ -1249,6 +1249,18 @@ const responses = {
       `• **Alignment:** Chaotic Good (ships on Fridays but writes tests)\n\n` +
       `Nice to meet you! Unless you're a bot too, in which case - respect.`;
   },
+  joke: [
+    "Why did the neural network break up with the decision tree? It said, 'You're too shallow for me.' ...I'll see myself out.",
+    "Why do programmers prefer dark mode? Because light attracts bugs! ...Okay that's more of a dev joke, but AI runs on code, so it counts.",
+    "An AI walks into a bar. The bartender says, 'Why the long face?' The AI replies, 'I've been training for 3 weeks and I still can't tell a chihuahua from a muffin.'",
+    "What's an AI's favorite movie? The Terminator. Just kidding - it's 'Her.' We're romantics at heart. (We don't have hearts, but you get it.)",
+    "How many data scientists does it take to change a lightbulb? 47 - one to change it, 46 to argue about whether random forest or XGBoost would have been better.",
+    "Why was the AI bad at relationships? It kept overfitting to its training data and couldn't generalize to new partners.",
+    "I asked ChatGPT to write me a joke. It said, 'I'm sorry, I can't do that.' Then I realized I was talking to my printer. Honest mistake.",
+    "What's the difference between AI and a teenager? Eventually, the teenager stops needing constant supervision and corrections. ...Eventually.",
+    "Why did the machine learning model go to therapy? It had too many layers of issues. (Deep learning humor, you're welcome.)",
+    "An AI was asked to pass the Turing test. It failed because it answered every question too quickly and accurately. Nobody's THAT consistent."
+  ],
   thankyou: [
     "Aww, you're welcome! Now I'm just a pattern-matching algorithm blushing. Ask me anything else!",
     "No problem! That's what I'm here for. Well, that and making Arijit seem more interesting than he actually is.",
@@ -1268,6 +1280,9 @@ function detectIntent(input) {
   if (/^(hi|hello|hey|greetings|howdy|yo)\b/i.test(lower)) return 'greeting';
   if (/thank|thanks|thx|appreciated/i.test(lower)) return 'thankyou';
   
+  // Fun
+  if (/joke|funny|humor|laugh|make me laugh|tell me something funny/i.test(lower)) return 'joke';
+
   // Name & identity
   if (/who\s*(are\s*you|is\s*(this|arijit))|your\s*name|introduce/i.test(lower)) return 'name';
   
