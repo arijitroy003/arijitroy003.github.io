@@ -23,6 +23,11 @@ function navigate(id) {
 
   // Ensure footer is appended
   appendFooter(id);
+  
+  // Trigger skills network initialization when navigating to skills page
+  if (id === 'skills' && typeof initSkillsNetwork === 'function') {
+    setTimeout(initSkillsNetwork, 100);
+  }
 }
 
 function appendFooter(pageId) {

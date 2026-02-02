@@ -45,7 +45,7 @@
     <div class="chat-section fade-up delay-4" id="chat-section">
       <div class="chat-header">
         <span class="chat-header-icon">›</span>
-        <span class="chat-header-title">Talk to my AI-Self</span>
+        <span class="chat-header-title">Talk to my AI Assistant (!Warning: I'm not very smart)</span>
       </div>
       <div class="chat-messages" id="chat-messages">
         <div class="chat-message bot">Hey! I'm Arijit's AI assistant. Ask me anything about my experience, skills, projects, or background.</div>
@@ -266,14 +266,39 @@
 
 <!-- ═══════════════════ SKILLS ═══════════════════ -->
 <section class="page" id="page-skills">
-  <div class="exp-header">
-    <div class="page-title-row">
-      <h2 class="page-title">skills</h2>
-      <span class="page-tag">full stack</span>
+  <!-- Skills Network Container -->
+  <div class="skills-network-wrapper">
+    <!-- Corner Brackets -->
+    <div class="corner-bracket top-left"></div>
+    <div class="corner-bracket top-right"></div>
+    <div class="corner-bracket bottom-left"></div>
+    <div class="corner-bracket bottom-right"></div>
+    
+    <!-- Connecting Lines SVG -->
+    <svg class="connecting-lines" id="connecting-lines"></svg>
+    
+    <!-- Floating Labels Container -->
+    <div class="floating-labels" id="floating-labels"></div>
+    
+    <!-- Central Content -->
+    <div class="skills-center">
+      <div class="pixel-grid" id="pixel-grid"></div>
+      <h2 class="skills-title">Skills</h2>
+      <p class="skills-subtitle">Core engineering, data infrastructure, AI/LLM, and DevOps</p>
+      
+      <!-- Category Legend -->
+      <div class="skills-legend">
+        <div class="legend-item"><span class="legend-dot" style="background: var(--green);"></span>Languages</div>
+        <div class="legend-item"><span class="legend-dot" style="background: #60a5fa;"></span>Cloud</div>
+        <div class="legend-item"><span class="legend-dot" style="background: #f59e0b;"></span>Data</div>
+        <div class="legend-item"><span class="legend-dot" style="background: #a855f7;"></span>AI/LLM</div>
+        <div class="legend-item"><span class="legend-dot" style="background: #ec4899;"></span>Databases</div>
+        <div class="legend-item"><span class="legend-dot" style="background: #6b7280;"></span>Research</div>
+      </div>
     </div>
-    <p class="page-subtitle">Core engineering, data infrastructure, AI/LLM, and DevOps.</p>
   </div>
 
+  <!-- Skills List (Detailed) -->
   <div class="skills-layout">
     <div class="skills-section fade-up">
       <div class="skills-section-title">Core Languages &amp; APIs</div>
@@ -324,6 +349,7 @@
 <!-- External JavaScript -->
 <script src="knowledge-base.js"></script>
 <script src="script.js"></script>
+<script src="hero-effects.js"></script>
 
 </body>
 </html>
