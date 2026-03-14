@@ -319,14 +319,14 @@ const responses = {
   aboutBot: () => {
     return `**About This Bot** - Yes, I'm aware of the meta-ness!\n\n` +
       `Technical specs:\n` +
-      `• **100% browser-based** - No API calls, no tracking, just JavaScript vibes\n` +
-      `• **Rule-based matching** - Pattern recognition, not actual intelligence (sorry to disappoint)\n` +
-      `• **Zero model downloads** - Loads faster than your patience runs out\n\n` +
+      `• **100% browser-based** - No API calls, no tracking, your data never leaves your device\n` +
+      `• **Two modes:** Basic (rule-based, instant) and **AI mode** (SmolLM2 LLM running locally in your browser via WebGPU!)\n` +
+      `• Click **"enable AI"** in the chat header to download a ~90MB model and unlock freeform conversation\n\n` +
       `I built this because:\n` +
       `a) Portfolio sites are boring\n` +
       `b) I wanted to show off without actually being there\n` +
-      `c) It was a fun weekend project that spiraled\n\n` +
-      `No, I can't pass the Turing test. Yes, I know more about Arijit than his mother does. (Not really, but I try.)`;
+      `c) Running an LLM in the browser is peak nerd flex\n\n` +
+      `In basic mode I'm just regex. In AI mode, I'm a tiny language model with big dreams.`;
   },
   blog: () => {
     return `**Blog & Side Projects** - Where I write things and build things for fun!\n\n` +
