@@ -95,18 +95,24 @@ function sendMessage() {
   
   document.getElementById('chat-quick-replies').style.display = 'none';
 
-  if (typeof LLMChat !== 'undefined' && LLMChat.isReady()) {
+  // Hybrid routing: rule-based responses are curated and accurate,
+  // so use them for any recognized intent. Only fall through to the
+  // LLM for questions the regex can't handle.
+  const intent = detectIntent(text);
+  if (intent !== 'fallback') {
+    sendRuleBasedMessage(text, intent);
+  } else if (typeof LLMChat !== 'undefined' && LLMChat.isReady()) {
     sendLLMMessage(text);
   } else {
-    sendRuleBasedMessage(text);
+    sendRuleBasedMessage(text, intent);
   }
 }
 
-function sendRuleBasedMessage(text) {
+function sendRuleBasedMessage(text, precomputedIntent) {
   showTyping();
   setTimeout(() => {
     hideTyping();
-    const intent = detectIntent(text);
+    const intent = precomputedIntent || detectIntent(text);
     const response = getResponse(intent);
     addMessage(response);
   }, 600 + Math.random() * 400);
@@ -125,7 +131,7 @@ async function sendLLMMessage(text) {
     if (cursor) cursor.remove();
   } catch (err) {
     bubble.remove();
-    sendRuleBasedMessage(text);
+    sendRuleBasedMessage(text, 'fallback');
   }
 }
 
@@ -165,7 +171,7 @@ function toggleLLM() {
     toggle.classList.add('active');
     toggle.disabled = false;
     updateChatHeader(true);
-    addMessage("LLM loaded! I can now answer freeform questions about Arijit. Try asking me anything!");
+    addMessage("AI mode enabled! I'll use curated answers for common topics and the LLM for freeform questions I don't have a scripted response for.");
   }).catch((err) => {
     if (progressBar) progressBar.style.display = 'none';
     toggle.textContent = 'enable AI';
