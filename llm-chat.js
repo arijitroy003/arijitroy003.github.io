@@ -22,29 +22,13 @@ const LLMChat = (() => {
     if (!kb) return 'You are a helpful portfolio assistant.';
 
     const a = kb.about;
-    const exp = kb.experience.map(e =>
-      `- ${e.company} (${e.period}): ${e.role}. ${e.highlights.join('; ')}`
-    ).join('\n');
 
-    const skills = Object.entries(kb.skills)
-      .map(([cat, items]) => `${cat}: ${items.join(', ')}`)
-      .join('\n');
-
-    const edu = kb.education
-      .map(e => `${e.school} - ${e.degree} (GPA: ${e.gpa}, ${e.period})`)
-      .join('; ');
-
-    return [
-      `You are ${a.name}'s AI portfolio assistant. Be witty, concise, and personable.`,
-      `Answer ONLY using the facts below. Never invent information.\n`,
-      `NAME: ${a.name} | ROLE: ${a.role} | EXPERIENCE: ${a.experience} | LOCATION: ${a.location}`,
-      `EMAIL: ${a.email} | GITHUB: ${a.github} | LINKEDIN: ${a.linkedin}\n`,
-      `WORK HISTORY:\n${exp}\n`,
-      `SKILLS:\n${skills}\n`,
-      `EDUCATION: ${edu}\n`,
-      `PROJECTS: ${kb.projects.join('; ')}\n`,
-      `Keep answers to 2-4 sentences. Use humor sparingly. If asked about something not listed, say you don't have that info.`
-    ].join('\n');
+    // Keep the prompt short — small models follow brief context better.
+    return `You are ${a.name}'s portfolio chatbot. ${a.name} is a ${a.role} with ${a.experience} experience in Bangalore, India.
+Companies: Red Hat (current), Beem, Tata Digital, Gnosis Lab.
+Skills: Python, Go, Snowflake, Databricks, Kubernetes, LangChain, LLMs, MCP.
+Contact: ${a.email}, GitHub ${a.github}, LinkedIn ${a.linkedin}.
+Answer in 1-3 short sentences. Only use facts above. If unsure, say you don't know.`;
   }
 
   async function loadWebLLM() {
