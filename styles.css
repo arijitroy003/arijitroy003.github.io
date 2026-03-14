@@ -772,9 +772,76 @@ footer {
   30% { opacity: 1; transform: scale(1.2); }
 }
 
+/* ─── LLM Toggle & Progress ─── */
+.llm-toggle {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--green);
+  background: transparent;
+  border: 1px solid var(--green);
+  border-radius: 20px;
+  padding: 4px 12px;
+  cursor: pointer;
+  transition: all .25s;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  white-space: nowrap;
+}
+.llm-toggle:hover:not(:disabled) {
+  background: var(--green);
+  color: #0a0a0a;
+}
+.llm-toggle:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+.llm-toggle.active {
+  background: var(--green);
+  color: #0a0a0a;
+  border-color: var(--green);
+}
+
+.llm-progress {
+  display: none;
+  height: 2px;
+  background: #1a1a1a;
+  overflow: hidden;
+}
+.llm-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--green);
+  transition: width .3s ease;
+}
+
+/* ─── Streaming Cursor ─── */
+.chat-message.streaming {
+  min-height: 20px;
+}
+.stream-cursor {
+  display: inline-block;
+  width: 7px;
+  height: 14px;
+  background: var(--green);
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  animation: streamBlink .6s step-end infinite;
+}
+@keyframes streamBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.chat-message.llm-error {
+  border-left-color: #ef4444;
+  color: #f87171;
+}
+
 @media (max-width: 600px) {
   .chat-messages { height: 200px; }
   .chat-message { max-width: 90%; }
+  .llm-toggle { font-size: 9px; padding: 3px 8px; }
 }
 
 /* ─── SKILLS NETWORK - Agentic Style ─── */
