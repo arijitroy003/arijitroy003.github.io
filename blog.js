@@ -40,11 +40,17 @@
     if (loaded) return Promise.resolve(articles);
 
     return fetch('blog/manifest.json')
-      .then(function(res) { return res.json(); })
+      .then(function(res) {
+        if (!res.ok) throw new Error('Failed to load blog manifest: ' + res.status);
+        return res.json();
+      })
       .then(function(filenames) {
         var fetches = filenames.map(function(name) {
           return fetch('blog/' + name)
-            .then(function(res) { return res.text(); })
+            .then(function(res) {
+              if (!res.ok) throw new Error('Failed to load article: ' + name + ' (' + res.status + ')');
+              return res.text();
+            })
             .then(function(raw) {
               var parsed = parseFrontmatter(raw);
               return {
@@ -60,6 +66,14 @@
         articles = results;
         loaded = true;
         return articles;
+      })
+      .catch(function(err) {
+        console.error('Blog load error:', err);
+        var container = document.getElementById('blog-list');
+        if (container) {
+          container.innerHTML = '<p style="color:var(--white-dim);font-family:var(--mono);font-size:12px;padding:20px;">Could not load articles. Try refreshing the page.</p>';
+        }
+        return [];
       });
   }
 
