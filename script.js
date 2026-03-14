@@ -47,13 +47,27 @@ function appendFooter(pageId) {
 }
 
 // ─── Chat UI Functions ───
+function formatChatText(text) {
+  return text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+}
+
 function addMessage(text, isUser = false) {
   const container = document.getElementById('chat-messages');
   const msg = document.createElement('div');
   msg.className = 'chat-message ' + (isUser ? 'user' : 'bot');
-  msg.innerHTML = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+  msg.innerHTML = formatChatText(text);
   container.appendChild(msg);
   container.scrollTop = container.scrollHeight;
+}
+
+function createStreamingBubble() {
+  const container = document.getElementById('chat-messages');
+  const msg = document.createElement('div');
+  msg.className = 'chat-message bot streaming';
+  msg.innerHTML = '<span class="stream-cursor"></span>';
+  container.appendChild(msg);
+  container.scrollTop = container.scrollHeight;
+  return msg;
 }
 
 function showTyping() {
@@ -79,17 +93,108 @@ function sendMessage() {
   addMessage(text, true);
   input.value = '';
   
-  // Hide quick replies after first message
   document.getElementById('chat-quick-replies').style.display = 'none';
-  
+
+  // Hybrid routing: rule-based responses are curated and accurate,
+  // so use them for any recognized intent. Only fall through to the
+  // LLM for questions the regex can't handle.
+  const intent = detectIntent(text);
+  if (intent !== 'fallback') {
+    sendRuleBasedMessage(text, intent);
+  } else if (typeof LLMChat !== 'undefined' && LLMChat.isReady()) {
+    sendLLMMessage(text);
+  } else {
+    sendRuleBasedMessage(text, intent);
+  }
+}
+
+function sendRuleBasedMessage(text, precomputedIntent) {
   showTyping();
-  
   setTimeout(() => {
     hideTyping();
-    const intent = detectIntent(text);
+    const intent = precomputedIntent || detectIntent(text);
     const response = getResponse(intent);
     addMessage(response);
   }, 600 + Math.random() * 400);
+}
+
+async function sendLLMMessage(text) {
+  const bubble = createStreamingBubble();
+  const container = document.getElementById('chat-messages');
+  try {
+    await LLMChat.generate(text, (token, fullText) => {
+      bubble.innerHTML = formatChatText(fullText) + '<span class="stream-cursor"></span>';
+      container.scrollTop = container.scrollHeight;
+    });
+    bubble.classList.remove('streaming');
+    const cursor = bubble.querySelector('.stream-cursor');
+    if (cursor) cursor.remove();
+  } catch (err) {
+    bubble.remove();
+    sendRuleBasedMessage(text, 'fallback');
+  }
+}
+
+// ─── LLM Toggle ───
+function toggleLLM() {
+  const toggle = document.getElementById('llm-toggle');
+  if (!toggle) return;
+
+  if (typeof LLMChat === 'undefined') {
+    showLLMStatus('LLM module not loaded', true);
+    return;
+  }
+
+  if (LLMChat.isReady()) return;
+  if (LLMChat.isLoading()) return;
+
+  if (!LLMChat.checkWebGPUSupport()) {
+    showLLMStatus('WebGPU not supported in this browser', true);
+    toggle.disabled = true;
+    return;
+  }
+
+  toggle.disabled = true;
+  toggle.textContent = 'loading...';
+
+  const progressBar = document.getElementById('llm-progress');
+  const progressFill = document.getElementById('llm-progress-fill');
+  if (progressBar) progressBar.style.display = 'block';
+
+  LLMChat.initEngine((progress) => {
+    const pct = Math.round((progress.progress || 0) * 100);
+    if (progressFill) progressFill.style.width = pct + '%';
+    toggle.textContent = 'loading ' + pct + '%';
+  }).then(() => {
+    if (progressBar) progressBar.style.display = 'none';
+    toggle.textContent = 'AI on';
+    toggle.classList.add('active');
+    toggle.disabled = false;
+    updateChatHeader(true);
+    addMessage("AI mode enabled! I'll use curated answers for common topics and the LLM for freeform questions I don't have a scripted response for.");
+  }).catch((err) => {
+    if (progressBar) progressBar.style.display = 'none';
+    toggle.textContent = 'enable AI';
+    toggle.disabled = false;
+    showLLMStatus('Failed to load AI model: ' + err.message, true);
+  });
+}
+
+function showLLMStatus(message, isError) {
+  const container = document.getElementById('chat-messages');
+  const msg = document.createElement('div');
+  msg.className = 'chat-message bot' + (isError ? ' llm-error' : '');
+  msg.innerHTML = formatChatText(message);
+  container.appendChild(msg);
+  container.scrollTop = container.scrollHeight;
+}
+
+function updateChatHeader(llmActive) {
+  const title = document.getElementById('chat-header-title');
+  if (!title) return;
+  title.textContent = llmActive
+    ? 'AI-Powered Assistant (SmolLM2 · runs in your browser)'
+    : 'Talk to my AI Assistant (!Warning: I\'m not very smart)';
 }
 
 function sendQuickReply(topic) {
