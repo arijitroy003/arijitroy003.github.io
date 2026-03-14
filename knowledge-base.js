@@ -328,6 +328,18 @@ const responses = {
       `c) It was a fun weekend project that spiraled\n\n` +
       `No, I can't pass the Turing test. Yes, I know more about Arijit than his mother does. (Not really, but I try.)`;
   },
+  blog: () => {
+    return `**Blog & Side Projects** - Where I write things and build things for fun!\n\n` +
+      `**Articles:**\n` +
+      `• Technical deep-dives on data mesh, MCP servers, vector databases, and Delta Lake migrations\n` +
+      `• Check the **blog** tab for links to my Medium articles\n\n` +
+      `**Side Projects:**\n` +
+      `• **usernaut** - K8s operator for user management (Go)\n` +
+      `• **gitlab-mr-reviewer** - AI-powered MR reviews (Python/FastAPI)\n` +
+      `• **genai-toolbox** - MCP server for database access (Go)\n` +
+      `• This very portfolio site!\n\n` +
+      `Click the **blog** tab in the nav to see everything.`;
+  },
   resume: () => {
     return `**Resume Request Detected!**\n\n` +
       `Options for maximum Arijit documentation:\n` +
@@ -412,7 +424,8 @@ function detectIntent(input) {
   if (/achievement|accomplish|impact|metric|numbers|savings|result/i.test(lower)) return 'achievements';
   
   // Personal
-  if (/hobbi|interest|free\s*time|fun|outside\s*work|chess|linux|blog/i.test(lower)) return 'hobbies';
+  if (/\bblog\b|article|medium|writing|side\s*project|repos?\b/i.test(lower)) return 'blog';
+  if (/hobbi|interest|free\s*time|fun|outside\s*work|chess|linux/i.test(lower)) return 'hobbies';
   
   // Leadership
   if (/lead|leader|team|manage|mentor/i.test(lower)) return 'leadership';
