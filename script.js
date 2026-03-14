@@ -1,5 +1,5 @@
 // ─── SPA Navigation ───
-const pages = ['index','experience','projects','skills'];
+const pages = ['index','experience','projects','skills','blog'];
 
 function navigate(id) {
   event && event.preventDefault();
@@ -106,6 +106,20 @@ function sendQuickReply(topic) {
 function handleChatKeypress(e) {
   if (e.key === 'Enter') sendMessage();
 }
+
+// ─── Article Modal (close only; open handled by blog.js) ───
+function closeArticle(e, force) {
+  var overlay = document.getElementById('article-overlay');
+  if (!overlay) return;
+  if (force || (e && e.target === overlay)) {
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeArticle(null, true);
+});
 
 // ─── Initialize ───
 // Init footer on home page
