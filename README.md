@@ -1,87 +1,73 @@
-# Arijit Kumar Roy - Portfolio Website
+# arijitroy003.github.io
 
-A modern, responsive portfolio website showcasing my work in Data Engineering, AI/ML, and Software Development.
+Personal portfolio — static SPA built with vanilla HTML, CSS, and JavaScript. No frameworks, no build step.
 
-## 🌟 Features
+**Live:** [arijitroy003.github.io](https://arijitroy003.github.io)
 
-- **Responsive Design**: Optimized for all devices (desktop, tablet, mobile)
-- **Modern Aesthetics**: Clean, professional design inspired by leading tech companies
-- **Smooth Animations**: Subtle animations and interactions (respects `prefers-reduced-motion`)
-- **Performance Optimized**: Fast loading with minimal dependencies
-- **Accessibility**: Proper semantic HTML and keyboard navigation
-- **Dark Mode Support**: Automatic dark mode based on system preferences
+![Portfolio screenshot](assets/screenshot.png)
 
-## 🛠️ Tech Stack
+## Features
 
-- **HTML5**: Semantic markup with proper accessibility
-- **CSS3**: Modern CSS with custom properties, grid, flexbox
-- **Vanilla JavaScript**: No external dependencies for optimal performance
-- **Fonts**: Chakra Petch (display) and JetBrains Mono (body)
+- **Single Page Application** — 5 sections (Home, Experience, Projects, Skills, Blog) swapped via JS display toggling
+- **AI Chatbot** — Rule-based intent detection with optional in-browser LLM mode (SmolLM2 via WebLLM/WebGPU)
+- **Blog Engine** — Markdown articles rendered client-side with frontmatter parsing (vendored marked.js)
+- **Dark / Light Theme** — Manual toggle with `localStorage` persistence, respects `prefers-color-scheme`
+- **Skills Network Visualization** — Interactive SVG graph with category-based colors and connecting lines
+- **Responsive** — Mobile-first layout, `prefers-reduced-motion` support
 
-## 📱 Sections
+## Tech Stack
 
-1. **Hero**: Introduction with animated gradient text
-2. **About**: Professional summary and key focus areas
-3. **Experience**: Timeline of work experience with tech stacks
-4. **Skills**: Categorized technical skills and technologies
-5. **Contact**: Professional contact information and links
+- **HTML5** — Semantic markup, accessibility attributes
+- **CSS3** — Custom properties design system (`--bg`, `--green`, `--white`, etc.), dark/light theming via `[data-theme]`
+- **Vanilla JavaScript** — SPA routing, chat UI, streaming LLM responses, blog rendering
+- **Fonts** — IBM Plex Mono (UI/code), Inter (body text)
+- **CI** — GitHub Actions runs `validate.py` on push, deploys to GitHub Pages
 
-## 🚀 Local Development
+## Project Structure
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/arijitroy003/arijitroy003.github.io.git
-   cd arijitroy003.github.io
-   ```
+```
+├── index.html            # All HTML content, script loading
+├── styles.css            # Design system, all styling, theme overrides
+├── script.js             # SPA navigation, chat UI, theme toggle
+├── knowledge-base.js     # Chatbot data, regex intents, responses
+├── llm-chat.js           # WebLLM integration (optional AI mode)
+├── hero-effects.js       # Skills network SVG visualization
+├── blog.js               # Markdown blog engine
+├── blog/                 # Blog articles (markdown + manifest.json)
+├── lib/                  # Vendored libraries (marked.min.js)
+├── validate.py           # CI validation (HTML/CSS/JS checks, cross-refs)
+├── .nojekyll             # Prevents GitHub Pages Jekyll processing
+└── .github/workflows/    # Deploy pipeline
+```
 
-2. Start a local server:
-   ```bash
-   # Using Python
-   python3 -m http.server 8000
-   
-   # Using Node.js (if you have it installed)
-   npx serve .
-   
-   # Using PHP (if you have it installed)
-   php -S localhost:8000
-   ```
+## Local Development
 
-3. Open http://localhost:8000 in your browser
+```bash
+git clone https://github.com/arijitroy003/arijitroy003.github.io.git
+cd arijitroy003.github.io
+python3 -m http.server 8000
+# Open http://localhost:8000
+```
 
-## ✅ Validation
-
-Run the validation script to check for any issues:
+## Validation
 
 ```bash
 python3 validate.py
 ```
 
-## 📈 Performance Features
+Checks HTML structure, CSS syntax, JS bracket balance, cross-references (HTML IDs ↔ JS `getElementById`, `onclick` ↔ defined functions), local asset existence, blog manifest integrity, and basic accessibility.
 
-- **Optimized Images**: All images are compressed and responsive
-- **Minimal Dependencies**: No external JavaScript libraries
-- **CSS Custom Properties**: Efficient styling with CSS variables
-- **Intersection Observer**: Efficient scroll animations
-- **Throttled Events**: Optimized scroll and resize handlers
+## Deployment
 
-## 🌐 Deployment
+Automatic via GitHub Actions on push to `main`:
 
-This website is designed to be deployed on GitHub Pages:
+1. Runs `validate.py` — blocks deploy on failure
+2. Uploads site artifact
+3. Deploys to GitHub Pages
 
-1. Push to the `main` branch of your `username.github.io` repository
-2. Enable GitHub Pages in repository settings
-3. Your site will be available at `https://username.github.io`
-
-## 📄 License
-
-This project is open source and available under the [MIT License](LICENSE).
-
-## 📞 Contact
+## Contact
 
 - **Email**: arijitroy003@gmail.com
 - **GitHub**: [@arijitroy003](https://github.com/arijitroy003)
 - **LinkedIn**: [Arijit Roy](https://www.linkedin.com/in/sudo-kill)
-
----
-
-Built with ❤️ and clean code principles.
+- **Topmate**: [topmate.io/arijitroy003](https://topmate.io/arijitroy003)
