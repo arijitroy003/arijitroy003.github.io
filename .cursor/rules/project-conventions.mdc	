@@ -1,0 +1,11 @@
+---
+description: general guidenless
+alwaysApply: true    # true = applies to every conversation
+---
+
+# Rule Title
+
+Always write tldr style commits
+Do not sign commits with Cursor or Claude
+Use gpg signing for commits
+ask questions whenever in doubt 
