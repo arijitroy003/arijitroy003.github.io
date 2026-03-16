@@ -36,12 +36,12 @@ function appendFooter(pageId) {
 
   const footer = document.createElement('footer');
   footer.className = 'page-footer';
-  footer.style.cssText = 'max-width:780px;margin:48px auto 0;padding:28px 0 36px;border-top:1px solid #1a1a1a;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;';
+  footer.style.cssText = 'max-width:780px;margin:48px auto 0;padding:28px 0 36px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;';
   footer.innerHTML = `
     <div style="font-family:var(--mono);font-size:11px;color:var(--white-dim);">
       © 2026 Arijit Roy · <a href="https://github.com/arijitroy003" target="_blank" style="color:var(--white-dim);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--green)'" onmouseout="this.style.color='var(--white-dim)'">github</a> · <a href="https://linkedin.com/in/sudo-kill" target="_blank" style="color:var(--white-dim);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--green)'" onmouseout="this.style.color='var(--white-dim)'">linkedin</a>
     </div>
-    <div style="font-family:var(--mono);font-size:10px;color:#3a3a3a;">bangalore, india</div>
+    <div style="font-family:var(--mono);font-size:10px;color:var(--white-dim);">bangalore, india</div>
   `;
   document.getElementById('page-' + pageId).appendChild(footer);
 }
@@ -225,6 +225,27 @@ function closeArticle(e, force) {
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') closeArticle(null, true);
 });
+
+// ─── Theme Toggle ───
+function toggleTheme() {
+  var current = document.documentElement.getAttribute('data-theme');
+  var next = current === 'light' ? 'dark' : 'light';
+  if (next === 'dark') {
+    document.documentElement.removeAttribute('data-theme');
+  } else {
+    document.documentElement.setAttribute('data-theme', 'light');
+  }
+  localStorage.setItem('theme', next);
+  updateThemeLabel(next);
+}
+
+function updateThemeLabel(theme) {
+  var label = document.getElementById('theme-label');
+  if (label) label.textContent = theme === 'light' ? 'dark' : 'light';
+}
+
+// Set initial label based on current theme
+updateThemeLabel(document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
 
 // ─── Initialize ───
 // Init footer on home page
