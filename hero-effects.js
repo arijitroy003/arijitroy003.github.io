@@ -55,18 +55,25 @@
   let isInitialized = false;
   let pixelInterval = null;
 
+  // ─── Cleanup (called before re-init or on window close) ───
+  function cleanupSkillsNetwork() {
+    if (pixelInterval) { clearInterval(pixelInterval); pixelInterval = null; }
+    if (container) container.removeEventListener('mousemove', handleMouseMove);
+    window.removeEventListener('resize', handleResize);
+    labels = [];
+    container = null;
+    linesContainer = null;
+    labelsContainer = null;
+    pixelGridContainer = null;
+    isInitialized = false;
+  }
+
   // ─── Main Initialize Function ───
   function initSkillsNetwork() {
+    cleanupSkillsNetwork();
+
     container = document.querySelector('.skills-network-wrapper');
     if (!container) return;
-
-    // Prevent double initialization
-    if (isInitialized && labels.length > 0) {
-      // Just redraw if already initialized
-      repositionLabels();
-      drawConnectingLines();
-      return;
-    }
 
     linesContainer = document.getElementById('connecting-lines');
     labelsContainer = document.getElementById('floating-labels');
@@ -74,29 +81,19 @@
 
     if (!linesContainer || !labelsContainer || !pixelGridContainer) return;
 
-    // Clear and recreate everything
     createFloatingLabels();
     createPixelGrid();
-    
-    // Draw lines after a frame to ensure labels are positioned
+
     requestAnimationFrame(function() {
       requestAnimationFrame(function() {
         drawConnectingLines();
       });
     });
 
-    // Set up event listeners
-    setupEventListeners();
-    
-    isInitialized = true;
-  }
-
-  // ─── Setup Event Listeners ───
-  function setupEventListeners() {
-    if (container) {
-      container.addEventListener('mousemove', handleMouseMove);
-    }
+    if (container) container.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('resize', handleResize);
+
+    isInitialized = true;
   }
 
   // ─── Create Floating Labels ───
@@ -283,8 +280,9 @@
     }
   }
 
-  // ─── Make function globally available ───
+  // ─── Make functions globally available ───
   window.initSkillsNetwork = initSkillsNetwork;
+  window.cleanupSkillsNetwork = cleanupSkillsNetwork;
 
   // ─── Initialize when DOM is ready ───
   function onReady() {

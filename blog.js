@@ -160,7 +160,8 @@
     var match = hash.match(/^#article-(\d+)$/);
     if (match) {
       var index = parseInt(match[1], 10);
-      navigate('blog');
+      // ponytail: open blog window if WindowManager available, else just load inline
+      if (typeof WindowManager !== 'undefined') WindowManager.open('blog');
       loadBlog().then(function() {
         renderBlogList();
         setTimeout(function() { openArticle(index); }, 100);
@@ -184,24 +185,6 @@
     },
     checkHash: checkArticleHash
   };
-
-  // ─── Auto-load when blog page becomes active ───
-  var blogPage = document.getElementById('page-blog');
-  if (blogPage) {
-    var observer = new MutationObserver(function(mutations) {
-      mutations.forEach(function(mutation) {
-        if (mutation.attributeName === 'class' && blogPage.classList.contains('active')) {
-          loadBlog().then(renderBlogList);
-        }
-      });
-    });
-    observer.observe(blogPage, { attributes: true });
-
-    // If blog is already active on page load
-    if (blogPage.classList.contains('active')) {
-      loadBlog().then(renderBlogList);
-    }
-  }
 
   // Check deep-link hash on load
   window.addEventListener('hashchange', checkArticleHash);

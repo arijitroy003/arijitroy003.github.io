@@ -19,25 +19,64 @@
 </head>
 <body>
 
-<!-- ─── NAV ─── -->
-<nav>
-  <a class="nav-logo" href="#" onclick="navigate('index')">arijit<span>roy</span> <span style="color:var(--green)">›</span></a>
-  <div class="nav-links">
-    <a href="#" onclick="navigate('index')" id="nav-index" class="active">home</a>
-    <a href="#" onclick="navigate('experience')" id="nav-experience">experience</a>
-    <a href="#" onclick="navigate('projects')" id="nav-projects">projects</a>
-    <a href="#" onclick="navigate('skills')" id="nav-skills">skills</a>
-    <a href="#" onclick="navigate('blog')" id="nav-blog">blog</a>
-  </div>
-  <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" aria-label="Toggle light/dark mode">
-    <svg class="theme-icon" id="theme-icon-sun" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-    <svg class="theme-icon" id="theme-icon-moon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-    <span id="theme-label">light</span>
-  </button>
-</nav>
+<!-- ─── Boot Screen ─── -->
+<div id="boot-screen" class="boot-screen">
+  <div class="boot-logo">arijit<span class="boot-accent">roy</span> OS</div>
+  <div class="boot-progress"><div class="boot-progress-fill" id="boot-progress-fill"></div></div>
+  <div class="boot-status" id="boot-status">loading kernel...</div>
+</div>
 
-<!-- ═══════════════════ INDEX / HERO ═══════════════════ -->
-<section class="page active" id="page-index">
+<!-- ─── Desktop ─── -->
+<div id="desktop" class="desktop" style="display:none">
+  <div class="desktop-icons" id="desktop-icons">
+    <button class="desktop-icon" data-app="about" aria-label="Open About">
+      <span class="desktop-icon-img">ℹ</span>
+      <span class="desktop-icon-label">About</span>
+    </button>
+    <button class="desktop-icon" data-app="terminal" aria-label="Open Terminal">
+      <span class="desktop-icon-img">&gt;_</span>
+      <span class="desktop-icon-label">Terminal</span>
+    </button>
+    <button class="desktop-icon" data-app="experience" aria-label="Open Experience">
+      <span class="desktop-icon-img">📄</span>
+      <span class="desktop-icon-label">Experience</span>
+    </button>
+    <button class="desktop-icon" data-app="projects" aria-label="Open Projects">
+      <span class="desktop-icon-img">📁</span>
+      <span class="desktop-icon-label">Projects</span>
+    </button>
+    <button class="desktop-icon" data-app="skills" aria-label="Open Skills">
+      <span class="desktop-icon-img">⚙</span>
+      <span class="desktop-icon-label">Skills</span>
+    </button>
+    <button class="desktop-icon" data-app="blog" aria-label="Open Blog">
+      <span class="desktop-icon-img">📝</span>
+      <span class="desktop-icon-label">Blog</span>
+    </button>
+  </div>
+
+  <div class="window-layer" id="window-layer"></div>
+
+  <nav class="taskbar" id="taskbar" role="navigation" aria-label="Taskbar">
+    <div class="taskbar-start">
+      <button class="taskbar-menu-btn" id="taskbar-menu-btn" aria-label="Menu">
+        <span class="taskbar-logo">arijit<span class="taskbar-logo-accent">roy</span></span>
+      </button>
+    </div>
+    <div class="taskbar-apps" id="taskbar-apps" role="tablist"></div>
+    <div class="taskbar-tray">
+      <button class="theme-toggle-btn" id="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+        <svg class="theme-icon" id="theme-icon-sun" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        <svg class="theme-icon" id="theme-icon-moon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+      <span class="taskbar-clock" id="taskbar-clock"></span>
+    </div>
+  </nav>
+</div>
+
+<!-- ═══ App Templates ═══ -->
+
+<template id="tpl-about">
   <div class="hero">
     <div class="terminal-line fade-up">
       <span class="prompt">~$</span> init portfolio — Jan 2026
@@ -51,36 +90,10 @@
       Snowflake · Databricks · LLMs · Agentic AI · Real-time streaming — end to end.
     </p>
     <div class="hero-actions fade-up delay-3">
-      <a href="#" class="btn btn-primary" onclick="navigate('experience')">view work</a>
+      <a href="#" class="btn btn-primary" onclick="WindowManager.open('experience')">view work</a>
       <a href="https://topmate.io/arijitroy003" target="_blank" class="btn btn-outline">get in touch</a>
     </div>
-
-    <!-- AI Chat Section -->
-    <div class="chat-section fade-up delay-4" id="chat-section">
-      <div class="chat-header">
-        <span class="chat-header-icon">›</span>
-        <span class="chat-header-title" id="chat-header-title">Talk to my AI Assistant (!Warning: I'm not very smart)</span>
-        <button class="llm-toggle" id="llm-toggle" onclick="toggleLLM()">enable LLM hallucinations</button>
-      </div>
-      <div class="llm-progress" id="llm-progress">
-        <div class="llm-progress-fill" id="llm-progress-fill"></div>
-      </div>
-      <div class="chat-messages" id="chat-messages">
-        <div class="chat-message bot">Hey! I'm Arijit's AI assistant. Ask me anything about my experience, skills, projects, or background.</div>
-      </div>
-      <div class="chat-quick-replies" id="chat-quick-replies">
-        <button class="chat-quick-btn" onclick="sendQuickReply('experience')">experience</button>
-        <button class="chat-quick-btn" onclick="sendQuickReply('skills')">skills</button>
-        <button class="chat-quick-btn" onclick="sendQuickReply('projects')">projects</button>
-        <button class="chat-quick-btn" onclick="sendQuickReply('contact')">contact</button>
-      </div>
-      <div class="chat-input-row">
-        <input type="text" class="chat-input" id="chat-input" placeholder="Type your question..." onkeypress="handleChatKeypress(event)">
-        <button class="chat-send" onclick="sendMessage()">send</button>
-      </div>
-    </div>
-
-    <div class="meta-row fade-up delay-5">
+    <div class="meta-row fade-up delay-4">
       <div class="meta-item">
         <span class="meta-label">location</span>
         <span class="meta-value">bangalore, india</span>
@@ -95,10 +108,35 @@
       </div>
     </div>
   </div>
-</section>
+</template>
 
-<!-- ═══════════════════ EXPERIENCE ═══════════════════ -->
-<section class="page" id="page-experience">
+<template id="tpl-terminal">
+  <div class="chat-section">
+    <div class="chat-header">
+      <span class="chat-header-icon">›</span>
+      <span class="chat-header-title" id="chat-header-title">Talk to my AI Assistant (!Warning: I'm not very smart)</span>
+      <button class="llm-toggle" id="llm-toggle" onclick="toggleLLM()">enable LLM hallucinations</button>
+    </div>
+    <div class="llm-progress" id="llm-progress">
+      <div class="llm-progress-fill" id="llm-progress-fill"></div>
+    </div>
+    <div class="chat-messages" id="chat-messages">
+      <div class="chat-message bot">Hey! I'm Arijit's AI assistant. Ask me anything about my experience, skills, projects, or background.</div>
+    </div>
+    <div class="chat-quick-replies" id="chat-quick-replies">
+      <button class="chat-quick-btn" onclick="sendQuickReply('experience')">experience</button>
+      <button class="chat-quick-btn" onclick="sendQuickReply('skills')">skills</button>
+      <button class="chat-quick-btn" onclick="sendQuickReply('projects')">projects</button>
+      <button class="chat-quick-btn" onclick="sendQuickReply('contact')">contact</button>
+    </div>
+    <div class="chat-input-row">
+      <input type="text" class="chat-input" id="chat-input" placeholder="Type your question..." onkeypress="handleChatKeypress(event)">
+      <button class="chat-send" onclick="sendMessage()">send</button>
+    </div>
+  </div>
+</template>
+
+<template id="tpl-experience">
   <div class="exp-header">
     <div class="page-title-row">
       <h2 class="page-title">experience</h2>
@@ -106,9 +144,7 @@
     </div>
     <p class="page-subtitle">Enterprise platforms, GenAI products, and high-scale data engineering across fintech, e-commerce &amp; SaaS.</p>
   </div>
-
   <div class="exp-grid">
-    <!-- Red Hat -->
     <div class="exp-card fade-up">
       <div class="exp-card-top">
         <span class="exp-company">Red Hat</span>
@@ -126,8 +162,6 @@
         <span class="tag">GitOps</span><span class="tag">Snowflake</span><span class="tag">dbt-Core</span><span class="tag">AWS</span><span class="tag">Golang</span><span class="tag">Kubernetes</span><span class="tag">Python</span><span class="tag">Fivetran</span><span class="tag">Airflow</span><span class="tag">Atlan</span><span class="tag">GitLab CI/CD</span>
       </div>
     </div>
-
-    <!-- Beem -->
     <div class="exp-card fade-up delay-1">
       <div class="exp-card-top">
         <span class="exp-company">Beem</span>
@@ -144,8 +178,6 @@
         <span class="tag">Databricks</span><span class="tag">AWS S3</span><span class="tag">Python</span><span class="tag">MongoDB</span><span class="tag">Mixpanel</span><span class="tag">Metabase</span>
       </div>
     </div>
-
-    <!-- Tata Digital -->
     <div class="exp-card fade-up delay-2">
       <div class="exp-card-top">
         <span class="exp-company">Tata Digital (Tata Neu)</span>
@@ -164,8 +196,6 @@
         <span class="tag">PySpark</span><span class="tag">Databricks</span><span class="tag">Delta Lake</span><span class="tag">Azure OpenAI</span><span class="tag">LangChain</span><span class="tag">Scala</span><span class="tag">ADLS</span><span class="tag">Kusto</span>
       </div>
     </div>
-
-    <!-- Gnosis Lab -->
     <div class="exp-card fade-up delay-3">
       <div class="exp-card-top">
         <span class="exp-company">Gnosis Lab</span>
@@ -182,8 +212,6 @@
       </div>
     </div>
   </div>
-
-  <!-- Education inline -->
   <div style="max-width:780px; margin:48px auto 0;">
     <div class="page-title-row" style="margin-bottom:14px;">
       <h3 class="page-title" style="font-size:22px;">education</h3>
@@ -213,10 +241,9 @@
       </div>
     </div>
   </div>
-</section>
+</template>
 
-<!-- ═══════════════════ PROJECTS ═══════════════════ -->
-<section class="page" id="page-projects">
+<template id="tpl-projects">
   <div class="exp-header">
     <div class="page-title-row">
       <h2 class="page-title">projects</h2>
@@ -224,7 +251,6 @@
     </div>
     <p class="page-subtitle">Production deployments, research &amp; freelance builds.</p>
   </div>
-
   <div class="proj-grid">
     <div class="proj-card fade-up">
       <div class="proj-card-label">[freelance · 2021]</div>
@@ -234,7 +260,6 @@
         <span class="tag">React Native</span><span class="tag">Firebase</span><span class="tag">GCP</span><span class="tag">BigQuery</span><span class="tag">Razorpay</span>
       </div>
     </div>
-
     <div class="proj-card fade-up delay-1">
       <div class="proj-card-label">[research · 2017]</div>
       <div class="proj-card-title">Offline File System Search</div>
@@ -243,7 +268,6 @@
         <span class="tag">Python</span><span class="tag">NLP</span><span class="tag">Linux</span><span class="tag">Information Retrieval</span>
       </div>
     </div>
-
     <div class="proj-card fade-up delay-2">
       <div class="proj-card-label">[red hat · 2024–present]</div>
       <div class="proj-card-title">GitOps Data Mesh Platform</div>
@@ -252,7 +276,6 @@
         <span class="tag">Snowflake</span><span class="tag">dbt</span><span class="tag">Kubernetes</span><span class="tag">GitOps</span><span class="tag">Airflow</span>
       </div>
     </div>
-
     <div class="proj-card fade-up delay-3">
       <div class="proj-card-label">[tata neu · 2022–2023]</div>
       <div class="proj-card-title">GenAI Product Search Engine</div>
@@ -261,7 +284,6 @@
         <span class="tag">Azure OpenAI</span><span class="tag">LangChain</span><span class="tag">Milvus</span><span class="tag">Chroma</span><span class="tag">Mistral</span>
       </div>
     </div>
-
     <div class="proj-card fade-up delay-4">
       <div class="proj-card-label">[tata neu · 2021–2023]</div>
       <div class="proj-card-title">Conversational AI Data Platform</div>
@@ -270,7 +292,6 @@
         <span class="tag">PySpark</span><span class="tag">Delta Lake</span><span class="tag">Deep Learning</span><span class="tag">Speech-to-Text</span>
       </div>
     </div>
-
     <div class="proj-card fade-up delay-5">
       <div class="proj-card-label">[beem · 2023–2024]</div>
       <div class="proj-card-title">LLM-Powered Personal Finance Platform</div>
@@ -280,31 +301,20 @@
       </div>
     </div>
   </div>
-</section>
+</template>
 
-<!-- ═══════════════════ SKILLS ═══════════════════ -->
-<section class="page" id="page-skills">
-  <!-- Skills Network Container -->
+<template id="tpl-skills">
   <div class="skills-network-wrapper">
-    <!-- Corner Brackets -->
     <div class="corner-bracket top-left"></div>
     <div class="corner-bracket top-right"></div>
     <div class="corner-bracket bottom-left"></div>
     <div class="corner-bracket bottom-right"></div>
-    
-    <!-- Connecting Lines SVG -->
     <svg class="connecting-lines" id="connecting-lines"></svg>
-    
-    <!-- Floating Labels Container -->
     <div class="floating-labels" id="floating-labels"></div>
-    
-    <!-- Central Content -->
     <div class="skills-center">
       <div class="pixel-grid" id="pixel-grid"></div>
       <h2 class="skills-title">Skills</h2>
       <p class="skills-subtitle">Core engineering, data infrastructure, AI/LLM, and DevOps</p>
-      
-      <!-- Category Legend -->
       <div class="skills-legend">
         <div class="legend-item"><span class="legend-dot" style="background: var(--green);"></span>Languages</div>
         <div class="legend-item"><span class="legend-dot" style="background: #60a5fa;"></span>Cloud</div>
@@ -315,8 +325,6 @@
       </div>
     </div>
   </div>
-
-  <!-- Skills List (Detailed) -->
   <div class="skills-layout">
     <div class="skills-section fade-up">
       <div class="skills-section-title">Core Languages &amp; APIs</div>
@@ -324,35 +332,30 @@
         <span class="skill-tag">Python</span><span class="skill-tag">Golang</span><span class="skill-tag">SQL</span><span class="skill-tag">T-SQL</span><span class="skill-tag">JavaScript</span><span class="skill-tag">TypeScript</span><span class="skill-tag">Shell</span><span class="skill-tag">Scala</span><span class="skill-tag">REST APIs</span><span class="skill-tag">Microservices</span><span class="skill-tag">Git</span>
       </div>
     </div>
-
     <div class="skills-section fade-up delay-1">
       <div class="skills-section-title">Cloud &amp; Infrastructure</div>
       <div class="skills-tags">
         <span class="skill-tag">AWS</span><span class="skill-tag">Azure</span><span class="skill-tag">GCP</span><span class="skill-tag">Kubernetes</span><span class="skill-tag">Docker</span><span class="skill-tag">Terraform</span><span class="skill-tag">GitOps</span><span class="skill-tag">CI/CD Pipelines</span><span class="skill-tag">Container Orchestration</span><span class="skill-tag">OAuth / SAML 2.0</span>
       </div>
     </div>
-
     <div class="skills-section fade-up delay-2">
       <div class="skills-section-title">Data Engineering</div>
       <div class="skills-tags">
         <span class="skill-tag">Snowflake</span><span class="skill-tag">Databricks</span><span class="skill-tag">PySpark</span><span class="skill-tag">Delta Lake</span><span class="skill-tag">dbt</span><span class="skill-tag">Data Mesh</span><span class="skill-tag">Airflow</span><span class="skill-tag">Kafka</span><span class="skill-tag">ETL / ELT</span><span class="skill-tag">Real-time Streaming</span><span class="skill-tag">Fivetran</span><span class="skill-tag">Atlan</span><span class="skill-tag">Data Modeling</span><span class="skill-tag">DataOps</span><span class="skill-tag">Distributed Compute</span>
       </div>
     </div>
-
     <div class="skills-section fade-up delay-3">
       <div class="skills-section-title">AI / LLM Engineering</div>
       <div class="skills-tags">
         <span class="skill-tag">LangChain</span><span class="skill-tag">Vector DBs (Milvus, Chroma, Qdrant)</span><span class="skill-tag">Embeddings</span><span class="skill-tag">OpenAI</span><span class="skill-tag">Claude</span><span class="skill-tag">Mistral</span><span class="skill-tag">Azure OpenAI</span><span class="skill-tag">Agentic AI</span><span class="skill-tag">MCP Servers</span><span class="skill-tag">AI Observability</span><span class="skill-tag">MLOps</span><span class="skill-tag">TensorFlow</span><span class="skill-tag">PyTorch</span><span class="skill-tag">NLP</span>
       </div>
     </div>
-
     <div class="skills-section fade-up delay-4">
       <div class="skills-section-title">Databases &amp; Storage</div>
       <div class="skills-tags">
         <span class="skill-tag">MongoDB</span><span class="skill-tag">DynamoDB</span><span class="skill-tag">NoSQL</span><span class="skill-tag">ADLS</span><span class="skill-tag">S3</span><span class="skill-tag">BigQuery</span><span class="skill-tag">Firebase</span><span class="skill-tag">Kusto</span>
       </div>
     </div>
-
     <div class="skills-section fade-up delay-5">
       <div class="skills-section-title">Research &amp; Extras</div>
       <div class="skills-tags">
@@ -360,10 +363,9 @@
       </div>
     </div>
   </div>
-</section>
+</template>
 
-<!-- ═══════════════════ BLOG ═══════════════════ -->
-<section class="page" id="page-blog">
+<template id="tpl-blog">
   <div class="exp-header">
     <div class="page-title-row">
       <h2 class="page-title">blog</h2>
@@ -371,11 +373,10 @@
     </div>
     <p class="page-subtitle">Articles and technical deep-dives.</p>
   </div>
-
   <div class="blog-list" id="blog-list"></div>
-</section>
+</template>
 
-<!-- ═══════════════════ ARTICLE MODAL (body-level for proper stacking) ═══════════════════ -->
+<!-- ─── Article Modal (body-level for z-index) ─── -->
 <div class="article-overlay" id="article-overlay" onclick="closeArticle(event)">
   <div class="article-modal" onclick="event.stopPropagation()">
     <button class="article-close" onclick="closeArticle(null, true)">&times;</button>
@@ -383,15 +384,16 @@
   </div>
 </div>
 
-<!-- ─── FOOTER (rendered inside each active page via JS) ─── -->
+<!-- Screen Reader Announcer -->
+<div id="sr-announcer" class="sr-only" aria-live="polite"></div>
 
-<!-- External JavaScript -->
+<!-- Scripts -->
 <script src="knowledge-base.js"></script>
 <script src="llm-chat.js"></script>
 <script src="script.js"></script>
 <script src="hero-effects.js"></script>
 <script src="lib/marked.min.js"></script>
 <script src="blog.js"></script>
-
+<script src="desktop.js"></script>
 </body>
 </html>

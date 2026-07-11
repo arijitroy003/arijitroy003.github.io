@@ -112,8 +112,15 @@ def validate_html(file_path):
 
 # ── Duplicate ID Check ───────────────────────────────────
 
+def strip_template_tags(content):
+    """Remove <template>...</template> blocks so their IDs don't conflict."""
+    return re.sub(r'<template\b[^>]*>.*?</template>', '', content, flags=re.DOTALL | re.IGNORECASE)
+
+
 def check_duplicate_ids(file_path):
     content = read_file(file_path)
+    # IDs inside <template> are inert DOM — exclude from duplicate check
+    content = strip_template_tags(content)
     errors = []
     ids = re.findall(r'\bid=["\']([^"\']+)["\']', content)
     counts = Counter(ids)
@@ -127,10 +134,20 @@ def check_duplicate_ids(file_path):
 
 def cross_reference_ids(html_path, js_files):
     html_content = read_file(html_path)
+    # Include IDs from both live DOM and <template> content (cloned at runtime)
     html_ids = set(re.findall(r'\bid=["\']([^"\']+)["\']', html_content))
 
-    # IDs that JS creates dynamically at runtime
-    dynamic_ids = {'typing-indicator'}
+    # IDs that JS creates dynamically at runtime (not in static HTML)
+    dynamic_ids = {
+        'typing-indicator',
+        # desktop.js boot/chrome elements
+        'boot-screen', 'boot-progress-fill', 'boot-status',
+        'desktop', 'desktop-icons', 'window-layer',
+        'taskbar-apps', 'taskbar-clock', 'sr-announcer',
+        # desktop.js template IDs (cloned from <template> at runtime)
+        'tpl-about', 'tpl-terminal', 'tpl-experience',
+        'tpl-projects', 'tpl-skills', 'tpl-blog',
+    }
 
     warnings = []
     for js_path in js_files:
