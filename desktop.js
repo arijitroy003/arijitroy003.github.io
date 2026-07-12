@@ -13,6 +13,26 @@ const WindowManager = (() => {
     blog:       { title: 'blog/',             w: 700, h: 550, icon: '📝' },
   };
 
+  // ── Position Memory ──
+
+  function saveWinPos(appId) {
+    var win = windows.get(appId);
+    if (!win || win.el.classList.contains('maximized')) return;
+    try {
+      localStorage.setItem('win-' + appId, JSON.stringify({
+        top: win.el.style.top, left: win.el.style.left,
+        width: win.el.style.width, height: win.el.style.height
+      }));
+    } catch(e) {}
+  }
+
+  function loadWinPos(appId) {
+    try {
+      var s = localStorage.getItem('win-' + appId);
+      return s ? JSON.parse(s) : null;
+    } catch(e) { return null; }
+  }
+
   // ── Core Window Operations ──
 
   function open(appId) {
@@ -179,16 +199,19 @@ const WindowManager = (() => {
 
   function createWindowEl(appId) {
     const config = APP_CONFIGS[appId];
-    const top = 60 + cascadeOffset * 30;
-    const left = 80 + cascadeOffset * 30;
-    cascadeOffset = (cascadeOffset + 1) % 6;
+    const saved = loadWinPos(appId);
+    const top = saved ? parseInt(saved.top) : 60 + cascadeOffset * 30;
+    const left = saved ? parseInt(saved.left) : 80 + cascadeOffset * 30;
+    const w = saved ? parseInt(saved.width) : config.w;
+    const h = saved ? parseInt(saved.height) : config.h;
+    if (!saved) cascadeOffset = (cascadeOffset + 1) % 6;
 
     const el = document.createElement('div');
     el.className = 'window';
     el.dataset.app = appId;
     el.setAttribute('role', 'dialog');
     el.setAttribute('aria-label', config.title);
-    el.style.cssText = 'top:' + top + 'px;left:' + left + 'px;width:' + config.w + 'px;height:' + config.h + 'px;z-index:' + (++zCounter);
+    el.style.cssText = 'top:' + top + 'px;left:' + left + 'px;width:' + w + 'px;height:' + h + 'px;z-index:' + (++zCounter);
 
     el.innerHTML =
       '<div class="window-titlebar">' +
@@ -282,6 +305,7 @@ const WindowManager = (() => {
       windowEl.classList.remove('dragging');
       titlebar.releasePointerCapture(e.pointerId);
       if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+      saveWinPos(appId);
     });
   }
 
@@ -340,6 +364,8 @@ const WindowManager = (() => {
       resizing = false;
       windowEl.classList.remove('dragging');
       handle.releasePointerCapture(e.pointerId);
+      var id = windowEl.dataset.app;
+      if (id) saveWinPos(id);
     });
   }
 
@@ -398,6 +424,7 @@ const WindowManager = (() => {
     initDesktopIcons();
     initClock();
     initKeyboard();
+    initContextMenu();
     // ponytail: no auto-open — let the user explore the desktop
   }
 
@@ -488,6 +515,43 @@ const WindowManager = (() => {
 
     const llmToggle = windowBody.querySelector('#llm-toggle');
     if (llmToggle) llmToggle.addEventListener('click', () => { if (typeof toggleLLM === 'function') toggleLLM(); });
+  }
+
+  // ── Context Menu ──
+
+  var ctxMenu = null;
+
+  function initContextMenu() {
+    ctxMenu = document.createElement('div');
+    ctxMenu.className = 'ctx-menu';
+    ctxMenu.style.display = 'none';
+    document.getElementById('desktop').appendChild(ctxMenu);
+
+    document.getElementById('desktop').addEventListener('contextmenu', function(e) {
+      if (e.target.closest('.window') || e.target.closest('.taskbar')) return;
+      e.preventDefault();
+      var items = Object.keys(APP_CONFIGS).map(function(id) {
+        return '<button class="ctx-item" data-action="open" data-app="' + id + '">' + APP_CONFIGS[id].icon + ' Open ' + APP_CONFIGS[id].title + '</button>';
+      });
+      items.push('<div class="ctx-sep"></div>');
+      items.push('<button class="ctx-item" data-action="closeall">Close All Windows</button>');
+      ctxMenu.innerHTML = items.join('');
+      ctxMenu.style.left = e.clientX + 'px';
+      ctxMenu.style.top = e.clientY + 'px';
+      ctxMenu.style.display = '';
+    });
+
+    ctxMenu.addEventListener('click', function(e) {
+      var btn = e.target.closest('.ctx-item');
+      if (!btn) return;
+      if (btn.dataset.action === 'open') open(btn.dataset.app);
+      if (btn.dataset.action === 'closeall') {
+        windows.forEach(function(_, id) { close(id); });
+      }
+      ctxMenu.style.display = 'none';
+    });
+
+    document.addEventListener('click', function() { if (ctxMenu) ctxMenu.style.display = 'none'; });
   }
 
   // ── Init ──

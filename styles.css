@@ -15,7 +15,7 @@
   --accent-blue-dim: rgba(96,165,250,.15);
   --mono: 'IBM Plex Mono', monospace;
   --sans: 'Inter', sans-serif;
-  --radius: 6px;
+  --radius: 4px;
   --border: #1a1a1a;
   --border-soft: #2a2a2a;
   --surface: #1a1a1a;
@@ -163,6 +163,8 @@ body {
   border-color: var(--green);
   font-weight: 600;
 }
+.btn:hover { transform: scale(1.05); }
+.btn:active { transform: scale(0.95); }
 .btn-primary:hover { background: #22c55e; border-color: #22c55e; box-shadow: 0 0 24px rgba(74,222,128,.25); }
 .btn-outline {
   background: transparent;
@@ -1230,6 +1232,22 @@ body {
 /* ─── Icon Drag ─── */
 .desktop-icon { position: relative; z-index: 1; touch-action: none; }
 .desktop-icon.icon-dragging { z-index: 100; opacity: .85; }
+
+/* ─── Context Menu ─── */
+.ctx-menu {
+  position: fixed; z-index: 2000; min-width: 180px;
+  background: var(--bg-card); border: 1px solid rgba(255,255,255,.1);
+  border-radius: var(--radius); box-shadow: var(--window-shadow);
+  padding: 4px 0; overflow: hidden;
+}
+.ctx-item {
+  display: block; width: 100%; text-align: left;
+  font-family: var(--mono); font-size: 11px; color: var(--white-mid);
+  background: transparent; border: none; padding: 8px 14px; cursor: pointer;
+  transition: background var(--duration-instant), color var(--duration-instant);
+}
+.ctx-item:hover { background: var(--green-dim); color: var(--green); }
+.ctx-sep { height: 1px; background: rgba(255,255,255,.08); margin: 4px 0; }
 
 /* ─── Screen Reader Only ─── */
 .sr-only {
