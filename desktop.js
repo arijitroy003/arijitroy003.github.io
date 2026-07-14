@@ -293,6 +293,12 @@ const WindowManager = (() => {
         moveX = Math.max(-(wW - 100), Math.min(vW - 100, moveX));
         moveY = Math.max(0, Math.min(vH - 100, moveY));
 
+        // ponytail: edge snap — snap to half-screen if dragged within 12px of edge
+        var snap = 12;
+        if (moveX <= snap) { moveX = 0; windowEl.style.width = (vW / 2) + 'px'; windowEl.style.height = (vH - 48) + 'px'; }
+        else if (moveX + wW >= vW - snap) { moveX = vW / 2; windowEl.style.width = (vW / 2) + 'px'; windowEl.style.height = (vH - 48) + 'px'; }
+        else if (moveY <= snap) { moveY = 0; windowEl.style.width = vW + 'px'; windowEl.style.height = (vH - 48) + 'px'; }
+
         windowEl.style.left = moveX + 'px';
         windowEl.style.top = moveY + 'px';
         rafId = null;
@@ -454,11 +460,24 @@ const WindowManager = (() => {
 
     icon.addEventListener('pointerup', function(e) {
       if (!captured) return;
-      if (moved) { offsetX += e.clientX - startX; offsetY += e.clientY - startY; }
+      if (moved) {
+        offsetX += e.clientX - startX; offsetY += e.clientY - startY;
+        try { localStorage.setItem('icon-' + icon.dataset.app, offsetX + ',' + offsetY); } catch(e2) {}
+      }
       captured = false;
       icon.releasePointerCapture(e.pointerId);
       icon.classList.remove('icon-dragging');
     });
+
+    // Restore saved position
+    try {
+      var saved = localStorage.getItem('icon-' + icon.dataset.app);
+      if (saved) {
+        var parts = saved.split(',');
+        offsetX = parseFloat(parts[0]); offsetY = parseFloat(parts[1]);
+        icon.style.transform = 'translate(' + offsetX + 'px,' + offsetY + 'px)';
+      }
+    } catch(e2) {}
 
     icon.addEventListener('dblclick', function() { if (!moved) open(icon.dataset.app); });
 

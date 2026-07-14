@@ -227,7 +227,7 @@ body {
   transition: background .25s, border-color .25s;
   cursor: default;
 }
-.exp-card:hover { background: var(--bg-card-hover); border-color: #252525; }
+.exp-card:hover { background: var(--bg-card-hover); border-color: #252525; transform: translateY(-2px); }
 
 .exp-card-top { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
 .exp-company {
@@ -291,7 +291,7 @@ body {
   padding: 28px 24px;
   transition: background .25s, border-color .25s;
 }
-.proj-card:hover { background: var(--bg-card-hover); border-color: #252525; }
+.proj-card:hover { background: var(--bg-card-hover); border-color: #252525; transform: translateY(-2px); }
 .proj-card-label {
   font-family: var(--mono);
   font-size: 10px;
@@ -1174,10 +1174,18 @@ body {
 .window-body::-webkit-scrollbar-track { background: transparent; }
 .window-body::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 2px; }
 
-/* Terminal fills its window */
-.window[data-app="terminal"] .window-body { padding: 0; display: flex; flex-direction: column; }
-.window[data-app="terminal"] .chat-section { margin-bottom: 0; border: none; border-radius: 0; flex: 1; display: flex; flex-direction: column; }
-.window[data-app="terminal"] .chat-messages { flex: 1; height: auto; min-height: 200px; }
+/* Terminal fills its window — green-on-black aesthetic */
+.window[data-app="terminal"] .window-body { padding: 0; display: flex; flex-direction: column; background: #0c0c0c; }
+.window[data-app="terminal"] .chat-section { margin-bottom: 0; border: none; border-radius: 0; flex: 1; display: flex; flex-direction: column; background: #0c0c0c; }
+.window[data-app="terminal"] .chat-messages { flex: 1; height: auto; min-height: 200px; background: #0c0c0c; }
+.window[data-app="terminal"] .chat-header { background: rgba(74,222,128,.08); }
+.window[data-app="terminal"] .chat-message.bot { background: #141414; border-left-color: var(--green); color: var(--green); font-family: var(--mono); font-size: 12px; }
+.window[data-app="terminal"] .chat-message.user { background: var(--green); color: #0c0c0c; }
+.window[data-app="terminal"] .chat-input { background: #141414; border-color: #222; color: var(--green); font-family: var(--mono); }
+.window[data-app="terminal"] .chat-input::placeholder { color: #2a5a3a; }
+.window[data-app="terminal"] .chat-input-row { background: #0c0c0c; border-top-color: #1a1a1a; }
+.window[data-app="terminal"] .chat-quick-btn { color: var(--green); border-color: #1a3a1a; }
+.window[data-app="terminal"] .chat-quick-btn:hover { background: rgba(74,222,128,.1); }
 
 /* ─── Taskbar ─── */
 .taskbar {
