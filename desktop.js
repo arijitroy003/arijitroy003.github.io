@@ -240,6 +240,14 @@ const WindowManager = (() => {
     el.querySelector('.window-btn-minimize').addEventListener('click', () => minimize(appId));
     el.querySelector('.window-btn-maximize').addEventListener('click', () => maximize(appId));
 
+    // Mobile titlebar close (tapping the ✕ pseudo-element area)
+    el.querySelector('.window-titlebar').addEventListener('click', function(e) {
+      if (window.innerWidth > 768) return;
+      if (e.target.closest('.window-controls')) return;
+      var rect = el.querySelector('.window-titlebar').getBoundingClientRect();
+      if (e.clientX > rect.right - 40) close(appId);
+    });
+
     // Focus on click anywhere in window
     el.addEventListener('mousedown', () => focus(appId));
 
@@ -442,6 +450,7 @@ const WindowManager = (() => {
     initClock();
     initKeyboard();
     initContextMenu();
+    try { var s = localStorage.getItem('scheme'); if (s && s !== 'default') document.documentElement.setAttribute('data-scheme', s); } catch(e) {}
     // ponytail: no auto-open — let the user explore the desktop
   }
 
@@ -498,10 +507,16 @@ const WindowManager = (() => {
   }
 
   function initClock() {
-    const el = document.getElementById('taskbar-clock');
-    if (!el) return;
+    var el = document.getElementById('taskbar-clock');
+    var conkyTime = document.getElementById('conky-time');
+    var conkyDate = document.getElementById('conky-date');
     function tick() {
-      el.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      var now = new Date();
+      if (el) el.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      if (conkyTime) conkyTime.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      if (conkyDate) conkyDate.textContent = now.toLocaleDateString([], { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+      var msbTime = document.getElementById('msb-time');
+      if (msbTime) msbTime.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     }
     tick();
     setInterval(tick, 1000);
@@ -564,6 +579,11 @@ const WindowManager = (() => {
         return '<button class="ctx-item" data-action="open" data-app="' + id + '">' + APP_CONFIGS[id].icon + ' Open ' + APP_CONFIGS[id].title + '</button>';
       });
       items.push('<div class="ctx-sep"></div>');
+      var schemes = ['default','catppuccin','gruvbox','nord','tokyo-night','dracula'];
+      schemes.forEach(function(s) {
+        items.push('<button class="ctx-item" data-action="scheme" data-scheme="' + s + '">Theme: ' + s + '</button>');
+      });
+      items.push('<div class="ctx-sep"></div>');
       items.push('<button class="ctx-item" data-action="closeall">Close All Windows</button>');
       ctxMenu.innerHTML = items.join('');
       ctxMenu.style.left = Math.min(e.clientX, window.innerWidth - 200) + 'px';
@@ -575,6 +595,10 @@ const WindowManager = (() => {
       var btn = e.target.closest('.ctx-item');
       if (!btn) return;
       if (btn.dataset.action === 'open') open(btn.dataset.app);
+      if (btn.dataset.action === 'scheme') {
+        document.documentElement.setAttribute('data-scheme', btn.dataset.scheme === 'default' ? '' : btn.dataset.scheme);
+        try { localStorage.setItem('scheme', btn.dataset.scheme); } catch(e) {}
+      }
       if (btn.dataset.action === 'closeall') {
         windows.forEach(function(_, id) { close(id); });
       }

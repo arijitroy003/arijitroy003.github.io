@@ -27,6 +27,13 @@
 
 <!-- ─── Desktop ─── -->
 <div id="desktop" class="desktop" style="display:none">
+  <div class="mobile-status-bar">
+    <span class="msb-time" id="msb-time"></span>
+    <div class="msb-right">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1"/></svg>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="6" width="18" height="12" rx="2"/><line x1="23" y1="13" x2="23" y2="11"/></svg>
+    </div>
+  </div>
   <div class="desktop-icons" id="desktop-icons">
     <button class="desktop-icon" data-app="about" aria-label="Open About">
       <span class="desktop-icon-img">ℹ</span>
@@ -52,6 +59,18 @@
       <span class="desktop-icon-img">📝</span>
       <span class="desktop-icon-label">Blog</span>
     </button>
+  </div>
+
+  <!-- Conky-style widget -->
+  <div class="conky" id="conky">
+    <div class="conky-time" id="conky-time"></div>
+    <div class="conky-date" id="conky-date"></div>
+    <div class="conky-stats">
+      uptime: 7y 2m<br>
+      projects: 6<br>
+      commits: 1.2k<br>
+      stack: python, golang, sql
+    </div>
   </div>
 
   <!-- Desktop theme slider -->
@@ -80,6 +99,9 @@
       <span class="taskbar-clock" id="taskbar-clock"></span>
     </div>
   </nav>
+  <div class="mobile-gesture-bar" id="gesture-bar" onclick="if(typeof WindowManager!=='undefined'){var ws=[];document.querySelectorAll('.window').forEach(function(w){if(w.dataset.app)ws.push(w.dataset.app)});ws.forEach(function(id){WindowManager.close(id)})}">
+    <div class="gesture-pill"></div>
+  </div>
 </div>
 
 <!-- ═══ App Templates ═══ -->
