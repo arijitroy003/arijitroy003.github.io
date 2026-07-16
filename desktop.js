@@ -51,6 +51,17 @@ const WindowManager = (() => {
     el.querySelector('.window-body').appendChild(content);
     document.getElementById('window-layer').appendChild(el);
 
+    // Auto-size to content (only if no saved position)
+    if (!loadWinPos(appId)) {
+      var body = el.querySelector('.window-body');
+      var maxW = Math.floor(window.innerWidth * 0.85);
+      var maxH = Math.floor((window.innerHeight - 48) * 0.85);
+      var naturalH = body.scrollHeight + 32 + 16;
+      var naturalW = Math.max(APP_CONFIGS[appId].w, body.scrollWidth + 48);
+      el.style.width = Math.min(naturalW, maxW) + 'px';
+      el.style.height = Math.min(naturalH, maxH) + 'px';
+    }
+
     windows.set(appId, { el, state: 'open', prevBounds: null });
     focus(appId);
     updateTaskbar();
@@ -293,12 +304,6 @@ const WindowManager = (() => {
         moveX = Math.max(-(wW - 100), Math.min(vW - 100, moveX));
         moveY = Math.max(0, Math.min(vH - 100, moveY));
 
-        // ponytail: edge snap — snap to half-screen if dragged within 12px of edge
-        var snap = 12;
-        if (moveX <= snap) { moveX = 0; windowEl.style.width = (vW / 2) + 'px'; windowEl.style.height = (vH - 48) + 'px'; }
-        else if (moveX + wW >= vW - snap) { moveX = vW / 2; windowEl.style.width = (vW / 2) + 'px'; windowEl.style.height = (vH - 48) + 'px'; }
-        else if (moveY <= snap) { moveY = 0; windowEl.style.width = vW + 'px'; windowEl.style.height = (vH - 48) + 'px'; }
-
         windowEl.style.left = moveX + 'px';
         windowEl.style.top = moveY + 'px';
         rafId = null;
@@ -311,6 +316,12 @@ const WindowManager = (() => {
       windowEl.classList.remove('dragging');
       titlebar.releasePointerCapture(e.pointerId);
       if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+      // ponytail: edge snap on drop — snap to half/full screen if released near viewport edge
+      var vW = window.innerWidth, vH = window.innerHeight, snap = 16;
+      var x = windowEl.offsetLeft, wW = windowEl.offsetWidth;
+      if (x <= snap) { windowEl.style.left = '0'; windowEl.style.top = '0'; windowEl.style.width = (vW / 2) + 'px'; windowEl.style.height = (vH - 48) + 'px'; }
+      else if (x + wW >= vW - snap) { windowEl.style.left = (vW / 2) + 'px'; windowEl.style.top = '0'; windowEl.style.width = (vW / 2) + 'px'; windowEl.style.height = (vH - 48) + 'px'; }
+      else if (windowEl.offsetTop <= snap) { windowEl.style.left = '0'; windowEl.style.top = '0'; windowEl.style.width = vW + 'px'; windowEl.style.height = (vH - 48) + 'px'; }
       saveWinPos(appId);
     });
   }
