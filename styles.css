@@ -46,7 +46,7 @@
 }
 
 [data-theme="light"] {
-  --bg: #f8f8f8;
+  --bg: #f5f3ee;
   --bg-card: #ffffff;
   --bg-card-hover: #f0f0f0;
   --green: #16a34a;
@@ -1250,6 +1250,31 @@ body {
 }
 .window:hover .window-resize-handle::after { opacity: .6; }
 .window.maximized .window-resize-handle { display: none; }
+
+/* ─── Desktop Theme Slider ─── */
+#desktop-toggle {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  z-index: 0; background: none; border: none; cursor: pointer;
+  opacity: 0.06; transition: opacity 600ms;
+  filter: blur(0.3px);
+}
+#desktop-toggle:hover { opacity: 0.18; }
+.dt-track {
+  display: flex; align-items: center; gap: 16px;
+  width: 200px; height: 64px; padding: 6px;
+  border-radius: 40px; border: 1.5px solid var(--white);
+  position: relative;
+}
+.dt-thumb {
+  position: absolute; left: 6px; top: 6px;
+  width: 50px; height: 50px; border-radius: 50%;
+  background: var(--white);
+  transition: left 500ms var(--ease-bounce);
+}
+[data-theme="light"] .dt-thumb { left: 142px; }
+.dt-icon { flex-shrink: 0; color: var(--white); margin: 0 8px; }
+.dt-sun { order: 0; }
+.dt-moon { order: 2; margin-left: auto; }
 
 /* ─── Icon Drag ─── */
 .desktop-icon { position: relative; z-index: 1; touch-action: none; }
