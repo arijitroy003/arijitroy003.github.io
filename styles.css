@@ -509,7 +509,7 @@ body {
   font-weight: 600;
 }
 .article-body pre {
-  background: #0d0d0d;
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 16px 20px;
@@ -1067,6 +1067,9 @@ body {
   display: none; /* shown only on mobile via media query */
 }
 
+/* ─── Mobile Desktop Note ─── */
+.mobile-desktop-note { display: none; }
+
 /* ─── Mobile Gesture Bar ─── */
 .mobile-gesture-bar {
   display: none; /* shown only on mobile via media query */
@@ -1335,6 +1338,14 @@ body {
     display: flex; align-items: center;
     position: fixed; bottom: 8px; left: 0; right: 0; z-index: 1001;
     height: 20px; cursor: pointer;
+  }
+
+  /* Desktop note */
+  .mobile-desktop-note {
+    display: block; position: fixed; bottom: 36px; left: 0; right: 0;
+    text-align: center; font-family: var(--mono); font-size: 9px;
+    color: var(--white-dim); opacity: 0.5; z-index: 1000;
+    letter-spacing: 0.5px;
   }
 
   /* Hide desktop elements */

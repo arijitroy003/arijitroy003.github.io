@@ -552,11 +552,7 @@ const WindowManager = (() => {
     const chatInput = windowBody.querySelector('#chat-input');
     if (chatInput) chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') { if (typeof sendMessage === 'function') sendMessage(); } });
 
-    const quickBtns = windowBody.querySelectorAll('.chat-quick-btn');
-    quickBtns.forEach(btn => {
-      const topic = btn.getAttribute('data-topic') || btn.textContent;
-      btn.addEventListener('click', () => { if (typeof sendQuickReply === 'function') sendQuickReply(topic); });
-    });
+    // ponytail: quick-reply buttons already have inline onclick handlers — don't double-bind
 
     const llmToggle = windowBody.querySelector('#llm-toggle');
     if (llmToggle) llmToggle.addEventListener('click', () => { if (typeof toggleLLM === 'function') toggleLLM(); });
