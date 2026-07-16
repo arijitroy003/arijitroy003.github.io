@@ -566,8 +566,8 @@ const WindowManager = (() => {
       items.push('<div class="ctx-sep"></div>');
       items.push('<button class="ctx-item" data-action="closeall">Close All Windows</button>');
       ctxMenu.innerHTML = items.join('');
-      ctxMenu.style.left = e.clientX + 'px';
-      ctxMenu.style.top = e.clientY + 'px';
+      ctxMenu.style.left = Math.min(e.clientX, window.innerWidth - 200) + 'px';
+      ctxMenu.style.top = Math.min(e.clientY, window.innerHeight - 250) + 'px';
       ctxMenu.style.display = '';
     });
 

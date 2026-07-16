@@ -181,6 +181,7 @@
     open: openArticle,
     share: shareBlog,
     load: function() {
+      loaded = false;
       loadBlog().then(renderBlogList);
     },
     checkHash: checkArticleHash
