@@ -1456,3 +1456,4 @@ body {
   .window { animation: none; }
   .desktop::before { animation: none; }
 }
+/* badge: improvements */
